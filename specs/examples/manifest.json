@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "defaults": {
+    "artist": "Test Artist",
+    "album_artist": "Test Artist",
+    "album": "Spring Demos",
+    "date": "2026",
+    "track_total": 4,
+    "disc": 1,
+    "disc_total": 1,
+    "genre": "Indie",
+    "composer": "Test Composer",
+    "compilation": false,
+    "artwork": "cover.jpg"
+  },
+  "files": {
+    "Spring/01 Night Bus.wav": {
+      "title": "Night Bus (demo)",
+      "date": "2026-03-14",
+      "track": 1,
+      "comment": "Take 2, room mic",
+      "extras": {
+        "BPM": "92"
+      }
+    },
+    "Spring/02 Perché no.aif": {
+      "title": "Perché no",
+      "date": "2026-03-20",
+      "track": 2,
+      "composer": "Test Composer, Anna Rossi",
+      "extras": {
+        "BPM": "104"
+      }
+    },
+    "Spring/03 Glasshouse.flac": {
+      "title": "Glasshouse",
+      "date": "2026-04",
+      "track": 3,
+      "genre": "Dream Pop",
+      "comment": null
+    },
+    "Spring/04 Last Train.mp3": {
+      "title": "Last Train (rough)",
+      "date": "2026-04-11",
+      "track": 4,
+      "comment": "Rough mix; vocals to redo\n\"Bridge\" still missing",
+      "artwork": "art/last-train.png"
+    }
+  }
+}

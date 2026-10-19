@@ -1,0 +1,97 @@
+# Example user configuration for Norma.
+# Location: ~/.config/norma/config.toml   (or any file, with --config FILE; --config /dev/null uses none)
+#
+# Keys are the C-10 field names: the long option names with hyphens replaced by underscores
+# (see `norma COMMAND --help`). Flat TOML only: no tables or sections.
+# Precedence: command-line options > this file > built-in defaults.
+# Unknown keys, wrong types and out-of-range values are errors (exit 2). Keys that do not
+# apply to the command being run are ignored.
+# Only preferences live here. Per-run switches (yes, overwrite, force, keep_failed, dry_run,
+# report, config, manifest, check_tags, verbose, quiet) and per-file fields (title, track,
+# album, date, disc, comment, artwork, remove_artwork, tag, clear_tag, number_tracks,
+# infer_from_filename) are not config keys; naming one is an error (exit 2).
+# Norma never replaces your originals: every output is a new copy (D-028), so there is
+# no setting for working in place.
+# Option groups: out_dir and suffix exclude each other, as do prefer = "source" and
+# no_source_tags = true. Set at most one of each pair here (both is exit 2); a command-line
+# choice such as -s replaces the out_dir below for that run.
+# Lines that set a key change the built-in default; commented-out keys show the defaults.
+
+# --- Loudness ---------------------------------------------------------------
+target = -16.0              # LUFS, -40 to -5; built-in default -16 (D-005)
+true_peak = -1.0            # dBTP, -9 to 0
+peak_mode = "limit"         # limit | reduce | dynamic; built-in default limit (D-005)
+max_limit = 3.0             # dB, 0 to 12: the most limiting allowed, as a predicted policy
+                            # figure (not measured); beyond it the file is reduced (WARN)
+# tolerance = 0.5           # LU, 0.05 to 3
+# skip_within = 0.3         # LU, 0 to 3, and not above tolerance; 0 never copies unchanged
+# no_dual_mono = false      # true: measure mono files as a single channel
+
+# --- Where outputs go (built-in default: a Normalised/ folder beside each source, D-006) ---
+# out_dir = "~/Music/Demos-Apple"   # "~" is expanded; set this or suffix, not both
+# suffix = " [{target}]"            # {target} becomes -16 (or -14.5)
+# rename = "{track:02} {title}"     # file names from tags; in v1 (D-009)
+
+# --- Format -----------------------------------------------------------------
+format = "apple"            # same | wav | flac | alac | aiff | mp3 | aac | apple
+                            # built-in default same; apple here is a user choice (D-007):
+                            # ALAC for lossless sources, MP3 and AAC kept as they are
+bit_depth = "same"          # same | 16 | 24 | 32 | float (ignored with a note for MP3/AAC outputs)
+sample_rate = "same"        # same | 44100 | 48000 | 88200 | 96000 | 176400 | 192000
+# dither = "auto"           # auto | triangular | none (ignored with a note for MP3/AAC outputs)
+# bitrate = "auto"          # lossy outputs only. "auto": MP3 always V0 (D-029); AAC at least
+                            # 256k, adjusted with WARN where this FFmpeg has no such setting.
+                            # Or "V0" to "V9" (MP3), or e.g. "256k", which must be a setting
+                            # checked for this FFmpeg at each file's rate and layout (no rounding).
+                            # Validate/use only for effective MP3/AAC targets after the guard
+                            # and fallback. Every lossless output ignores it, even in a mixed
+                            # run; one note only if no file uses it (D-030/D-031; cli § 3.3).
+                            # An invalid/unevidenced applicable lossy choice stops the run
+                            # before writes; lossless outputs never cause that refusal.
+                            # An MP3/AAC file copied unchanged (already at the target, no
+                            # conversion) keeps its encoded audio: the value is still checked
+                            # first, then not applied, with one per-file note (D-036; cli
+                            # § 7.1). Until MP3 capability evidence exists (an S0 task), any
+                            # MP3 output with a set bitrate stops the run (cli § 3.3).
+# flac_level = 8            # 0 to 8
+# lossy_sources = "reencode"        # reencode | lossless | skip; "lossless" stores MP3/AAC
+                                    # sources losslessly: ALAC with format = "apple", FLAC
+                                    # with same/mp3/aac, or the lossless format chosen (D-026)
+# allow_lossy_transcode = false
+
+# --- Metadata ---------------------------------------------------------------
+# Batch-wide values apply to EVERY file you process and, with prefer = "explicit" (D-008),
+# replace what the files already say. Enable them only if all your demos are yours.
+# A manifest (--manifest) beats them, and a command-line option beats both (D-027).
+# artist = "Test Artist"
+# album_artist = "Test Artist"
+# genre = "Demo"
+# composer = "Test Composer"
+# prefer = "explicit"       # explicit | source
+on_metadata_loss = "warn"   # warn | sidecar | error (D-008); losses are always listed;
+                            # sidecar also writes <audio name>.tags.json and picture exports
+                            # as reserved members: evidence plus a reusable canonical subset,
+                            # not complete recovery. No extra export for a retained cover.
+# strict_conflicts = false
+# wav_tags = "info+id3"     # info+id3 | info | none (D-007)
+# id3_version = "2.3"       # "2.3" or "2.4"; a bare number is accepted too
+artwork_max_size = 3000     # pixels, 300 to 10000; larger images are scaled down. Images over
+                            # 50 MiB or 16,384 pixels are refused per file (fixed limits)
+# folder_artwork = false    # use cover.jpg / cover.png / folder.jpg beside the files (D-009);
+                            # a manifest's artwork beats it
+# no_source_tags = false
+# no_title_fallback = false
+# no_mark_processed = false # true: omit the NORMA mark (disables already_processed and
+                            # verify's recorded target; verify --check-tags then fails
+                            # these files: processing mark missing)
+# infer_mode = "fill"       # fill | override (D-008); used only with --infer-from-filename
+# infer_underscores = false
+
+# --- Run --------------------------------------------------------------------
+jobs = 4                    # 1 to 32; the built-in default is min(4, CPU count)
+# recursive = false
+# ffmpeg = "/usr/local/bin/ffmpeg"
+# log = "~/Library/Logs/norma.log"   # used by normalise only; ignored by dry runs and
+                                        # read-only commands. Appended to, never replaced;
+                                        # its folder must exist, and it is checked against
+                                        # every input and output before anything is written

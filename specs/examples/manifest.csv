@@ -1,0 +1,7 @@
+file,title,artist,album_artist,album,date,track,track_total,disc,disc_total,genre,composer,comment,compilation,artwork,BPM
+*,,Test Artist,Test Artist,Spring Demos,2026,,4,1,1,Indie,Test Composer,,false,cover.jpg,
+Spring/01 Night Bus.wav,Night Bus (demo),,,,2026-03-14,1,,,,,,"Take 2, room mic",,,92
+Spring/02 Perché no.aif,Perché no,,,,2026-03-20,2,,,,,"Test Composer, Anna Rossi",,,,104
+Spring/03 Glasshouse.flac,Glasshouse,,,,2026-04,3,,,,Dream Pop,,[clear],,,
+Spring/04 Last Train.mp3,Last Train (rough),,,,2026-04-11,4,,,,,,"Rough mix; vocals to redo
+""Bridge"" still missing",,art/last-train.png,

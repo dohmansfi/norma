@@ -1,0 +1,36 @@
+Norma — analyse and normalise the loudness of music demo files
+Copyright (C) 2026 dohmansfi
+
+Licence
+
+Norma is free software: you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version (SPDX: GPL-3.0-or-later).
+
+Norma is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program (the file LICENSE in this distribution). If not, see
+<https://www.gnu.org/licenses/>.
+
+The full text of version 3 of the GNU General Public License is in the file
+LICENSE. That file is the unmodified text published by the Free Software
+Foundation, with the Foundation's own copyright notice; the copyright line
+above applies to Norma only, not to that text.
+
+Third-party software
+
+This notice does not replace, relicense or alter the terms of any other
+software. Each remains under its own licence, set by its own authors.
+
+- Mutagen (https://github.com/quodlibet/mutagen) is the one runtime library
+  Norma depends on. Its licence is GPL-2.0-or-later; it is not Norma's
+  licence. Norma declares it as a dependency, installed separately by the
+  Python installer, and does not include a copy of it. Its terms are
+  separate from the terms Norma's authors selected above.
+- FFmpeg and ffprobe are separate programs that Norma runs as subprocesses.
+  They are neither included in nor relicensed by Norma, and remain under
+  their own licences.

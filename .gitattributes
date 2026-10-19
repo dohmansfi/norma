@@ -1,0 +1,3 @@
+# Disable all line-ending conversion and text filters, whatever core.autocrlf says,
+# so the bytes that are tested are exactly the bytes that are committed.
+* -text

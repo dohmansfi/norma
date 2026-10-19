@@ -1,0 +1,55 @@
+# Ignore by default
+*
+
+# Public files
+!.gitignore
+!.gitattributes
+!.editorconfig
+!README.md
+!LICENSE
+!NOTICE
+!pyproject.toml
+!uv.lock
+
+# README images
+!assets/
+!assets/norma-wordmark.gif
+!assets/norma-wordmark.png
+
+# Source and tests
+!src/
+!src/**
+!tests/
+!tests/**
+
+# Schema and examples
+!specs/
+!specs/schema/
+!specs/schema/**
+!specs/examples/
+!specs/examples/**
+
+# Local files
+.DS_Store
+._*
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+# Editor files
+*~
+*.swp
+*.swo
+.#*
+# Audio
+*.wav
+*.aif
+*.aiff
+*.flac
+*.m4a
+*.mp3
+*.aac
+*.caf
+# Private files
+CHANGELOG.md
+tests/manual/

@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://norma.invalid/schema/manifest-v1.json",
+  "title": "Norma metadata manifest, JSON form, version 1",
+  "description": "Norma metadata manifest, schema version 1. Absent key = no opinion; null = clear the field. Schema validation alone is not sufficient: the loader also enforces integer literals for version, track, track_total, disc and disc_total (JSON Schema 2020-12 accepts 3.0 as an integer and 1.0 as equal to 1; MS11), refuses duplicate object keys, and checks real calendar dates, track <= track_total and disc <= disc_total, trimming and NFC, control characters, case-insensitive extra-name collisions and file selectors that normalise to a folder (metadata-schema MS2, MS7).",
+  "type": "object",
+  "required": ["version", "files"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "integer", "const": 1, "$comment": "Must be the integer token 1; the loader refuses 1.0 (MS11)." },
+    "defaults": { "$ref": "#/$defs/fields" },
+    "files": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "$ref": "#/$defs/fileKey" },
+      "additionalProperties": { "$ref": "#/$defs/fields" }
+    }
+  },
+  "$defs": {
+    "fileKey": {
+      "description": "Selector: a path relative to the manifest's folder, '/' separators, '.' and '..' segments allowed; or a bare file name. Not '*', not absolute, not '~', no trailing '/', no NUL; the loader also refuses selectors that normalise to a folder ('.', '..'). A lexical matching key only, never opened (metadata-schema MS2, MS5, MS13).",
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S",
+      "not": { "anyOf": [ { "const": "*" }, { "pattern": "^[/~]" }, { "pattern": "/$" }, { "pattern": "\\u0000" } ] }
+    },
+    "text": {
+      "description": "Trimmed NFC text, 1-1000 characters; whitespace-only is refused.",
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 1000,
+      "pattern": "\\S"
+    },
+    "positiveInt": { "type": ["integer", "null"], "minimum": 1 },
+    "extraName": {
+      "description": "Extra-name grammar (metadata-schema section 2.3). Canonical field names and 'file' have their own keys; reserved names are generated or removed by Norma. 'NORMA' is the processing-mark name (D-010, D-020, D-041).",
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_]{0,63}$",
+      "not": {
+        "anyOf": [
+          { "$comment": "canonical field names and 'file', case-insensitive",
+            "pattern": "^([Tt][Ii][Tt][Ll][Ee]|[Aa][Rr][Tt][Ii][Ss][Tt]|[Aa][Ll][Bb][Uu][Mm]_[Aa][Rr][Tt][Ii][Ss][Tt]|[Aa][Ll][Bb][Uu][Mm]|[Dd][Aa][Tt][Ee]|[Tt][Rr][Aa][Cc][Kk]|[Tt][Rr][Aa][Cc][Kk]_[Tt][Oo][Tt][Aa][Ll]|[Dd][Ii][Ss][Cc]|[Dd][Ii][Ss][Cc]_[Tt][Oo][Tt][Aa][Ll]|[Gg][Ee][Nn][Rr][Ee]|[Cc][Oo][Mm][Pp][Oo][Ss][Ee][Rr]|[Cc][Oo][Mm][Mm][Ee][Nn][Tt]|[Aa][Rr][Tt][Ww][Oo][Rr][Kk]|[Cc][Oo][Mm][Pp][Ii][Ll][Aa][Tt][Ii][Oo][Nn]|[Ff][Ii][Ll][Ee])$" },
+          { "$comment": "reserved names and prefixes, case-insensitive",
+            "pattern": "^([Nn][Oo][Rr][Mm][Aa]|[Ii][Tt][Uu][Nn][Nn][Oo][Rr][Mm]|[Ii][Tt][Uu][Nn][Ss][Mm][Pp][Bb]|[Ee][Nn][Cc][Oo][Dd][Ee][Rr])$|^([Rr][Ee][Pp][Ll][Aa][Yy][Gg][Aa][Ii][Nn]_|[Rr]128_)" }
+        ]
+      }
+    },
+    "fields": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": { "$ref": "#/$defs/text" },
+        "artist": { "$ref": "#/$defs/text" },
+        "album_artist": { "$ref": "#/$defs/text" },
+        "album": { "$ref": "#/$defs/text" },
+        "date": {
+          "description": "YYYY, YYYY-MM or YYYY-MM-DD; calendar validity is checked by the loader.",
+          "type": ["string", "null"],
+          "pattern": "^[0-9]{4}(-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[01]))?)?$"
+        },
+        "track": { "$ref": "#/$defs/positiveInt" },
+        "track_total": { "$ref": "#/$defs/positiveInt" },
+        "disc": { "$ref": "#/$defs/positiveInt" },
+        "disc_total": { "$ref": "#/$defs/positiveInt" },
+        "genre": { "$ref": "#/$defs/text" },
+        "composer": { "$ref": "#/$defs/text" },
+        "comment": { "type": ["string", "null"], "minLength": 1, "maxLength": 4000, "pattern": "\\S" },
+        "artwork": {
+          "description": "Image path; relative paths resolve against the manifest's folder.",
+          "type": ["string", "null"], "minLength": 1, "maxLength": 1024, "pattern": "\\S"
+        },
+        "compilation": { "type": ["boolean", "null"] },
+        "extras": {
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/extraName" },
+          "additionalProperties": { "type": ["string", "null"], "minLength": 1, "maxLength": 4000, "pattern": "\\S" }
+        }
+      }
+    }
+  }
+}
